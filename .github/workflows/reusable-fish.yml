@@ -1,0 +1,32 @@
+name: Reusable Fish syntax check
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  fish-syntax:
+    name: fish syntax
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout caller repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Install Fish
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends fish
+
+      - name: Validate tracked Fish files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -d '' files < <(git ls-files -z '*.fish')
+          if ((${#files[@]} == 0)); then
+            echo 'No tracked Fish files found.'
+            exit 0
+          fi
+          fish --no-execute "${files[@]}"
