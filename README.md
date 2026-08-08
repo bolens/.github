@@ -10,6 +10,8 @@ repositories retain their project-specific build, test, and release logic.
 
 - `reusable-actionlint.yml`: validates GitHub Actions workflow syntax.
 - `reusable-fish.yml`: syntax-checks tracked Fish shell files.
+- `reusable-pr-labeler.yml`: labels pull requests from repository-owned path
+  rules without checking out pull-request code.
 
 Call reusable workflows by an immutable release tag once the repository begins
 publishing baseline releases. Pilot repositories temporarily follow `main` so
