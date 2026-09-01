@@ -8,7 +8,7 @@ repositories retain their project-specific build, test, and release logic.
 
 ## Reusable workflows
 
-- `reusable-actionlint.yml`: validates GitHub Actions workflow syntax.
+- `reusable-actionlint.yml`: validates workflow syntax and can enforce the centrally pinned zizmor policy for callers that enable `security-audit`.
 - `reusable-fish.yml`: syntax-checks tracked Fish shell files.
 - `reusable-pr-labeler.yml`: labels pull requests from repository-owned path
   rules without checking out pull-request code.

@@ -2,18 +2,27 @@ name: Reusable actionlint
 
 on:
   workflow_call:
+    inputs:
+      security-audit:
+        description: Run the fleet-wide zizmor policy
+        required: false
+        type: boolean
+        default: false
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   actionlint:
     name: actionlint
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: read
     steps:
       - name: Checkout caller repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Install actionlint
         env:
@@ -31,3 +40,23 @@ jobs:
 
       - name: Validate workflows
         run: actionlint -color
+
+  zizmor:
+    name: zizmor
+    if: inputs.security-audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout caller repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Audit workflows
+        uses: zizmorcore/zizmor-action@3dc1ecc9bcb9e94e9b2c709687979e1298497054 # v0.6.2
+        with:
+          min-severity: medium
+          min-confidence: medium
