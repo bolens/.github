@@ -9,6 +9,8 @@ permissions: {}
 
 jobs:
   validate:
+    permissions:
+      contents: read
     uses: bolens/.github/.github/workflows/reusable-actionlint.yml@f83133026b8374c463a773d9e7308ad0c269fb2a
     with:
       security-audit: false
