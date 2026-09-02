@@ -1,0 +1,44 @@
+name: Reusable Spec Kit validation
+
+on:
+  workflow_call:
+    inputs:
+      tooling-ref:
+        description: Immutable bolens/.github commit containing the validator
+        required: true
+        type: string
+      expected-version:
+        description: Required GitHub Spec Kit version
+        required: false
+        type: string
+        default: 1.0.3
+
+permissions: {}
+
+jobs:
+  validate:
+    name: Spec Kit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout caller repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Checkout fleet validator
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: bolens/.github
+          ref: ${{ inputs.tooling-ref }}
+          path: .fleet-config
+          persist-credentials: false
+
+      - name: Validate Spec Kit
+        env:
+          EXPECTED_VERSION: ${{ inputs.expected-version }}
+        run: >-
+          python3 .fleet-config/scripts/validate-spec-kit.py
+          --expected-version "${EXPECTED_VERSION}" .

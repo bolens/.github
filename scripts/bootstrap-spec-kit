@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  echo "usage: $0 --tooling-ref COMMIT [--cron 'M H * * D'] REPOSITORY" >&2
+}
+
+tooling_ref=
+cron='17 7 * * 1'
+while (($#)); do
+  case "$1" in
+    --tooling-ref)
+      tooling_ref=${2-}
+      shift 2
+      ;;
+    --cron)
+      cron=${2-}
+      shift 2
+      ;;
+    --help|-h)
+      usage
+      exit 0
+      ;;
+    --*)
+      usage
+      exit 2
+      ;;
+    *)
+      repository=$1
+      shift
+      ;;
+  esac
+done
+
+if [[ -z "${tooling_ref}" || ! "${tooling_ref}" =~ ^[0-9a-f]{40}$ || -z "${repository-}" ]]; then
+  usage
+  exit 2
+fi
+
+root=$(git -C "${repository}" rev-parse --show-toplevel)
+if [[ -n "$(git -C "${root}" status --porcelain)" ]]; then
+  echo "refusing to bootstrap a dirty worktree: ${root}" >&2
+  exit 1
+fi
+
+specify init --here --force --non-interactive --integration codex \
+  --integration-options='--skills' --script sh --ignore-agent-tools
+mkdir -p "${root}/.github/workflows"
+central_root=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
+sed \
+  -e "s/CENTRAL_WORKFLOW_REF/${tooling_ref}/g" \
+  -e "s/SPEC_KIT_UPDATE_CRON/${cron}/g" \
+  "${central_root}/templates/spec-kit.yml" \
+  >"${root}/.github/workflows/spec-kit.yml"
+python3 "${central_root}/scripts/validate-spec-kit.py" "${root}"
+
+cat <<'EOF'
+Spec Kit initialized. Tailor .specify/memory/constitution.md, add the
+repository workflow guidance to AGENTS.md, and rerun validation before commit.
+EOF
