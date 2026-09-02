@@ -9,6 +9,6 @@ permissions: {}
 
 jobs:
   validate:
-    uses: bolens/.github/.github/workflows/reusable-spec-kit.yml@f83133026b8374c463a773d9e7308ad0c269fb2a
+    uses: bolens/.github/.github/workflows/reusable-actionlint.yml@f83133026b8374c463a773d9e7308ad0c269fb2a
     with:
-      tooling-ref: f83133026b8374c463a773d9e7308ad0c269fb2a
+      security-audit: false
