@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root=$(git rev-parse --show-toplevel)
+cd "$root"
+git diff --cached --check
+
+mapfile -t json_files < <(git diff --cached --name-only --diff-filter=ACMR -- '.specify/*.json' '.specify/**/*.json')
+if ((${#json_files[@]})); then
+  jq empty "${json_files[@]}"
+fi
+mapfile -t shell_files < <(git diff --cached --name-only --diff-filter=ACMR -- '.specify/scripts/bash/*.sh')
+if ((${#shell_files[@]})); then
+  printf '%s\0' "${shell_files[@]}" | xargs -0 -r -n1 bash -n
+fi
+if command -v specify >/dev/null 2>&1 && ! git diff --cached --quiet -- '.agents/**' '.specify/**'; then
+  specify integration status >/dev/null
+fi
+if ! git diff --cached --quiet -- '.github/workflows/*.yml' '.github/workflows/*.yaml'; then
+  actionlint
+  zizmor --offline --min-severity medium --min-confidence medium .github
+fi

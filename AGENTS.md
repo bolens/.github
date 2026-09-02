@@ -7,3 +7,5 @@ Read `.specify/memory/constitution.md` before changing shared workflows.
 - Preserve existing reusable-workflow callers; interface changes need migration
   notes and representative validation.
 - Do not publish releases, tags, or repository settings unless requested.
+
+- Run `bash scripts/install-git-hooks` once per clone; hooks mirror workflow and Spec Kit validation locally.

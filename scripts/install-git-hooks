@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root=$(git rev-parse --show-toplevel)
+git -C "$root" config core.hooksPath .githooks
+printf 'Installed pre-commit and pre-push hooks from .githooks.\n'
