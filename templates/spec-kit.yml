@@ -1,0 +1,44 @@
+# Replace CENTRAL_WORKFLOW_REF with the immutable bolens/.github commit.
+name: Spec Kit
+
+on:
+  pull_request:
+    paths:
+      - .agents/skills/speckit-*/**
+      - .specify/**
+      - .github/workflows/spec-kit.yml
+      - AGENTS.md
+  push:
+    branches: [main]
+    paths:
+      - .agents/skills/speckit-*/**
+      - .specify/**
+      - .github/workflows/spec-kit.yml
+      - AGENTS.md
+  schedule:
+    - cron: "SPEC_KIT_UPDATE_CRON"
+  workflow_dispatch:
+    inputs:
+      update:
+        description: Check for and propose a Spec Kit update
+        required: false
+        type: boolean
+        default: false
+
+permissions: {}
+
+jobs:
+  validate:
+    if: github.event_name != 'schedule' && !inputs.update
+    uses: bolens/.github/.github/workflows/reusable-spec-kit.yml@CENTRAL_WORKFLOW_REF
+    with:
+      tooling-ref: CENTRAL_WORKFLOW_REF
+
+  update:
+    if: github.event_name == 'schedule' || inputs.update
+    permissions:
+      contents: write
+      pull-requests: write
+    uses: bolens/.github/.github/workflows/reusable-spec-kit-update.yml@CENTRAL_WORKFLOW_REF
+    with:
+      tooling-ref: CENTRAL_WORKFLOW_REF

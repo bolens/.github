@@ -1,0 +1,128 @@
+name: Reusable Spec Kit update
+
+on:
+  workflow_call:
+    inputs:
+      tooling-ref:
+        description: Immutable bolens/.github commit containing the validator
+        required: true
+        type: string
+      update-branch:
+        description: Branch used for the update pull request
+        required: false
+        type: string
+        default: automation/spec-kit-update
+
+permissions: {}
+
+jobs:
+  update:
+    name: Update Spec Kit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout caller repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Checkout fleet validator
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: bolens/.github
+          ref: ${{ inputs.tooling-ref }}
+          path: .fleet-config
+          persist-credentials: false
+
+      - name: Exclude workflow tooling from updates
+        run: |
+          printf '/.fleet-config/\n' >>.git/info/exclude
+
+      - name: Resolve latest stable Spec Kit release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          release=$(gh api repos/github/spec-kit/releases/latest)
+          tag=$(jq -r '.tag_name' <<<"${release}")
+          version="${tag#v}"
+          object=$(gh api "repos/github/spec-kit/git/ref/tags/${tag}")
+          sha=$(jq -r '.object.sha' <<<"${object}")
+          type=$(jq -r '.object.type' <<<"${object}")
+          if [[ "${type}" == tag ]]; then
+            sha=$(gh api "repos/github/spec-kit/git/tags/${sha}" --jq '.object.sha')
+          elif [[ "${type}" != commit ]]; then
+            echo "Unsupported tag object type: ${type}" >&2
+            exit 1
+          fi
+          [[ "${sha}" =~ ^[0-9a-f]{40}$ ]]
+          printf 'tag=%s\nversion=%s\nsha=%s\n' \
+            "${tag}" "${version}" "${sha}" >>"${GITHUB_OUTPUT}"
+
+      - name: Detect update
+        id: current
+        env:
+          LATEST_VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          current=$(jq -r '.version' .specify/integration.json)
+          if [[ "${current}" == "${LATEST_VERSION}" ]]; then
+            echo 'needed=false' >>"${GITHUB_OUTPUT}"
+            echo "Spec Kit ${current} is current."
+          else
+            echo 'needed=true' >>"${GITHUB_OUTPUT}"
+            echo "Spec Kit ${current} -> ${LATEST_VERSION}"
+          fi
+
+      - name: Install uv
+        if: steps.current.outputs.needed == 'true'
+        uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
+        with:
+          enable-cache: false
+
+      - name: Regenerate Spec Kit
+        if: steps.current.outputs.needed == 'true'
+        env:
+          SPEC_KIT_SHA: ${{ steps.release.outputs.sha }}
+        run: |
+          set -euo pipefail
+          constitution_before=$(sha256sum .specify/memory/constitution.md | cut -d' ' -f1)
+          uv tool run \
+            --from "git+https://github.com/github/spec-kit.git@${SPEC_KIT_SHA}" \
+            specify init --here --force --non-interactive \
+              --integration codex --integration-options='--skills' \
+              --script sh --ignore-agent-tools
+          constitution_after=$(sha256sum .specify/memory/constitution.md | cut -d' ' -f1)
+          if [[ "${constitution_before}" != "${constitution_after}" ]]; then
+            echo 'Spec Kit regeneration changed the repository constitution.' >&2
+            exit 1
+          fi
+
+      - name: Validate update
+        if: steps.current.outputs.needed == 'true'
+        env:
+          EXPECTED_VERSION: ${{ steps.release.outputs.version }}
+        run: >-
+          python3 .fleet-config/scripts/validate-spec-kit.py
+          --expected-version "${EXPECTED_VERSION}" .
+
+      - name: Open update pull request
+        if: steps.current.outputs.needed == 'true'
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
+        with:
+          token: ${{ github.token }}
+          branch: ${{ inputs.update-branch }}
+          delete-branch: true
+          sign-commits: true
+          commit-message: "chore: update Spec Kit to ${{ steps.release.outputs.tag }}"
+          title: "chore: update Spec Kit to ${{ steps.release.outputs.tag }}"
+          body: |
+            Update the repository-managed Spec Kit files to
+            ${{ steps.release.outputs.tag }} from upstream commit
+            ${{ steps.release.outputs.sha }}.
+
+            The fleet validator checked manifests, managed-file hashes,
+            integration settings, constitution metadata, and shell syntax.
+          labels: dependencies,automation
