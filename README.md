@@ -12,6 +12,8 @@ repositories retain their project-specific build, test, and release logic.
 - `reusable-fish.yml`: syntax-checks tracked Fish shell files.
 - `reusable-pr-labeler.yml`: labels pull requests from repository-owned path
   rules without checking out pull-request code.
+- `reusable-spec-kit.yml`: validates repository-managed Spec Kit files.
+- `reusable-spec-kit-update.yml`: opens pinned upstream update pull requests.
 
 Call reusable workflows by an immutable release tag once the repository begins
 publishing baseline releases. Pilot repositories temporarily follow `main` so

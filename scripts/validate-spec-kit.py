@@ -14,9 +14,9 @@ from pathlib import Path
 PLACEHOLDERS = ("[PROJECT_NAME]", "[VERSION]", "[RATIFICATION_DATE]",
                 "[LAST_AMENDED_DATE]", "TODO")
 METADATA_RE = re.compile(
-    r"\\*\\*Version\\*\\*: (?P<version>\\d+\\.\\d+\\.\\d+) \\| "
-    r"\\*\\*Ratified\\*\\*: (?P<ratified>\\d{4}-\\d{2}-\\d{2}) \\| "
-    r"\\*\\*Last Amended\\*\\*: (?P<amended>\\d{4}-\\d{2}-\\d{2})$",
+    r"\*\*Version\*\*: (?P<version>\d+\.\d+\.\d+) \| "
+    r"\*\*Ratified\*\*: (?P<ratified>\d{4}-\d{2}-\d{2}) \| "
+    r"\*\*Last Amended\*\*: (?P<amended>\d{4}-\d{2}-\d{2})$",
     re.MULTILINE,
 )
 

@@ -43,8 +43,9 @@ if [[ -n "$(git -C "${root}" status --porcelain)" ]]; then
   exit 1
 fi
 
-specify init --here --force --non-interactive --integration codex \
-  --integration-options='--skills' --script sh --ignore-agent-tools
+(cd "${root}" && specify init --here --force --non-interactive \
+  --integration codex --integration-options='--skills' \
+  --script sh --ignore-agent-tools)
 mkdir -p "${root}/.github/workflows"
 central_root=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
 sed \
