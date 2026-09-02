@@ -35,6 +35,10 @@ jobs:
           path: .fleet-config
           persist-credentials: false
 
+      - name: Exclude workflow tooling from updates
+        run: |
+          printf '/.fleet-config/\n' >>.git/info/exclude
+
       - name: Resolve latest stable Spec Kit release
         id: release
         env:
@@ -111,6 +115,7 @@ jobs:
           token: ${{ github.token }}
           branch: ${{ inputs.update-branch }}
           delete-branch: true
+          sign-commits: true
           commit-message: "chore: update Spec Kit to ${{ steps.release.outputs.tag }}"
           title: "chore: update Spec Kit to ${{ steps.release.outputs.tag }}"
           body: |
