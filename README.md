@@ -16,3 +16,7 @@ repositories retain their project-specific build, test, and release logic.
 Call reusable workflows by an immutable release tag once the repository begins
 publishing baseline releases. Pilot repositories temporarily follow `main` so
 the interface can settle.
+
+### Git hooks
+
+Run `bash scripts/install-git-hooks` once per clone. The pre-commit hook runs fast staged checks; pre-push runs the broader local CI gate.
