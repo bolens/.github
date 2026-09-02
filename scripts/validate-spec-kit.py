@@ -136,7 +136,7 @@ def main() -> int:
     for repository in repositories:
         root = repository.resolve()
         expected_version = args.expected_version
-        if not expected_version:
+        if not expected_version or expected_version == "current":
             try:
                 expected_version = load_json(
                     root / ".specify/integration.json"
