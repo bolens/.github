@@ -1,4 +1,4 @@
-# Replace CENTRAL_WORKFLOW_REF with the immutable bolens/.github commit.
+# Pin both workflow references and tooling-ref to the same immutable commit.
 name: Spec Kit
 
 on:
