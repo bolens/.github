@@ -129,20 +129,36 @@ def validate(root: Path, expected_version: str) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("repositories", nargs="*", type=Path)
-    parser.add_argument("--expected-version", default="1.0.3")
+    parser.add_argument("--expected-version")
     args = parser.parse_args()
     repositories = args.repositories or [Path.cwd()]
     failed = False
     for repository in repositories:
         root = repository.resolve()
-        errors = validate(root, args.expected_version)
+        expected_version = args.expected_version
+        if not expected_version:
+            try:
+                expected_version = load_json(
+                    root / ".specify/integration.json"
+                ).get("version")
+            except ValueError as exc:
+                print(f"{root}: FAIL\n  - {exc}", file=sys.stderr)
+                failed = True
+                continue
+        if not isinstance(expected_version, str) or not re.fullmatch(
+            r"\d+\.\d+\.\d+", expected_version
+        ):
+            print(f"{root}: FAIL\n  - invalid Spec Kit version", file=sys.stderr)
+            failed = True
+            continue
+        errors = validate(root, expected_version)
         if errors:
             failed = True
             print(f"{root}: FAIL", file=sys.stderr)
             for error in errors:
                 print(f"  - {error}", file=sys.stderr)
         else:
-            print(f"{root}: Spec Kit {args.expected_version} valid")
+            print(f"{root}: Spec Kit {expected_version} valid")
     return 1 if failed else 0
 
 
