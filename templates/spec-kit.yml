@@ -29,6 +29,8 @@ permissions: {}
 
 jobs:
   validate:
+    permissions:
+      contents: read
     if: github.event_name != 'schedule' && !inputs.update
     uses: bolens/.github/.github/workflows/reusable-spec-kit.yml@CENTRAL_WORKFLOW_REF
     with:
