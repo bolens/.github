@@ -79,3 +79,10 @@ Tailor the generated constitution, create the project guide described above,
 and link it from `AGENTS.md` alongside the workflow rule. Run the validator and
 the repository's relevant checks before opening the pull request. Bootstrap
 can report unresolved constitution placeholders until customization is complete.
+
+## Superseded validation
+
+The caller cancels older validation jobs for the same workflow and Git ref.
+The update job has no cancellation group because it can write an update PR.
+Keep this concurrency block in callers when updating their immutable pins;
+reusable workflows inherit the caller workflow name and must not reuse its group.

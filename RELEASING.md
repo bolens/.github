@@ -114,3 +114,16 @@ rollback and require explicit operator authorization before applying it.
 - [ ] Publication permissions and secret boundaries are explicit.
 - [ ] Post-release checks cover every delivered surface.
 - [ ] Failure paths avoid force-pushing or mutating live systems implicitly.
+
+## CI concurrency
+
+Cancel superseded validation runs using a group unique to the workflow and full
+Git ref, with `cancel-in-progress: true`. Full refs distinguish fork PRs and
+branches; run IDs prevent superseded runs from sharing a group. For reusable
+checks, let the caller own concurrency and avoid duplicating its group in a
+called workflow. Scope job-level groups by job when a workflow has several jobs.
+
+Keep release, deployment, and repository-update operations outside cancellable
+validation groups. Mixed workflows must isolate PR validation from publication.
+After a newer commit supersedes a run, require successful checks on the current
+head before merging or delivering; a cancelled older run is not passing evidence.
