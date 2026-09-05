@@ -9,6 +9,30 @@ housekeeping unless their risk warrants a written specification.
 Keep completed feature directories under `specs/` as decision history. Do not
 create retroactive specifications for finished work.
 
+## Project-owned customization
+
+Every repository keeps a tailored `.specify/memory/constitution.md` and
+`.specify/memory/project-guide.md`, with the guide referenced from `AGENTS.md`.
+The constitution states durable constraints. The guide maps specification and
+planning decisions to real source files, acceptance cases, native validation,
+operational limits, and the repository's `RELEASING.md`.
+
+Review that map against the code before claiming setup is complete. Resolve
+project placeholders and stale paths. Do not invent test commands, hardware
+verification, or completed feature work. Record missing tools and manual checks
+as limitations rather than passes. Subprojects need tracked guidance when root
+instructions delegate to them.
+
+Templates, shell helpers, and generated Codex skills are upstream-managed and
+hash-checked. Their reusable placeholders are intentional. Put local rules in
+project-owned memory instead of modifying managed files or their recorded
+hashes. Verify project-owned memory survives regeneration when upgrading.
+
+Feature implementation remains separate from installing Spec Kit. For future
+features, fill the generated spec, plan, and tasks with actual decisions and
+evidence; mark work complete only after its acceptance checks. Empty feature
+history is valid for a repository that has not yet used that workflow.
+
 ## Validation and updates
 
 The reusable validation workflow checks:
@@ -51,6 +75,7 @@ bash scripts/bootstrap-spec-kit \
   /path/to/clean/repository
 ```
 
-Tailor the generated constitution and add the workflow rule from this
-repository's `AGENTS.md`. Run the validator and the repository's normal checks
-before opening the pull request.
+Tailor the generated constitution, create the project guide described above,
+and link it from `AGENTS.md` alongside the workflow rule. Run the validator and
+the repository's relevant checks before opening the pull request. Bootstrap
+can report unresolved constitution placeholders until customization is complete.

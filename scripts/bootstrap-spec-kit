@@ -67,6 +67,7 @@ PYTHON
 python3 "${central_root}/scripts/validate-spec-kit.py" "${root}"
 
 cat <<'EOF'
-Spec Kit initialized. Tailor .specify/memory/constitution.md, add the
-repository workflow guidance to AGENTS.md, and rerun validation before commit.
+Spec Kit initialized. Tailor .specify/memory/constitution.md, create the
+project-owned .specify/memory/project-guide.md, and reference both from
+AGENTS.md with the repository workflow guidance. Rerun validation before commit.
 EOF

@@ -9,7 +9,7 @@ Shared workflows and community files MUST remain small and composable. Project-s
 Workflow permissions MUST be least-privilege. Third-party actions MUST be pinned immutably, untrusted pull-request code MUST NOT receive secrets, and reusable workflow inputs MUST be validated.
 
 ### III. Backward-Compatible Consumers
-Changes to reusable workflow inputs, outputs, permissions, or behavior MUST account for existing callers. Breaking changes require an explicit migration and versioned release boundary.
+Changes to reusable workflow inputs, outputs, permissions, or behavior MUST account for existing callers. Breaking changes require an explicit migration and a coordinated rollout of immutable caller references through reviewed pull requests.
 
 ### IV. Focused Verification
 Every workflow change MUST be syntax-checked and, where practical, exercised by a representative caller. Documentation and examples MUST match the published interface.
@@ -18,4 +18,4 @@ Every workflow change MUST be syntax-checked and, where practical, exercised by 
 
 This constitution governs shared defaults and workflows. Repository-local guidance governs consumers. Amendments require rationale, review of downstream impact, and a version update.
 
-**Version**: 1.0.0 | **Ratified**: 2026-08-15 | **Last Amended**: 2026-08-15
+**Version**: 1.0.1 | **Ratified**: 2026-08-15 | **Last Amended**: 2026-09-05
