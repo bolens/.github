@@ -29,4 +29,6 @@ jobs:
             echo 'No tracked Fish files found.'
             exit 0
           fi
-          fish --no-execute "${files[@]}"
+          for file in "${files[@]}"; do
+            fish --no-execute "$file"
+          done

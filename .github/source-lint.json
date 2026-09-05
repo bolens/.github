@@ -1,0 +1,17 @@
+{
+  "python": [
+    "scripts/*",
+    "tests/*"
+  ],
+  "javascript": [
+    "tools/source-lint/*.mjs"
+  ],
+  "shell": [
+    "scripts/*",
+    ".githooks/*"
+  ],
+  "markdown": [
+    "docs/source-lint.md"
+  ],
+  "notes": "Managed Spec Kit files are verified by their dedicated integration gate."
+}

@@ -64,3 +64,28 @@ jobs:
           version: "1.29.0"
           min-severity: medium
           min-confidence: medium
+
+  source-lint:
+    name: Source lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '24'
+      - uses: astral-sh/ruff-action@278981a28ce3188b1e39527901f38254bf3aac89
+        with:
+          version: '0.15.20'
+          args: --version
+      - name: Install lint dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends shellcheck
+          npm ci --ignore-scripts --prefix tools/source-lint
+      - run: python3 scripts/lint-source.py .
+      - run: python3 tests/source_lint_smoke.py
