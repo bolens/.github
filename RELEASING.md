@@ -15,6 +15,7 @@ its own release or deployment model.
 
 Every repository playbook must state:
 
+- the branch push, PR review, squash merge, and post-merge verification path;
 - whether it publishes versioned releases or continuously delivers `main`;
 - the authoritative version source, when one exists;
 - the exact local validation command and required GitHub checks;
@@ -25,6 +26,40 @@ Every repository playbook must state:
 
 Commands must name real repository entry points. Do not replace a native task
 runner with a long list of underlying tools.
+
+## Push and merge
+
+These steps apply to every change, including documentation, automation, and
+release preparation. Repository playbooks supply the local validation and
+publication commands.
+
+1. Fetch the intended GitHub remote and branch from its current default branch
+   in a clean worktree. Preserve unrelated local work. Confirm the push remote,
+   target repository, base branch, and feature branch before publication.
+2. Run the relevant local checks and installed hooks. Review the complete diff
+   for secrets, private data, generated noise, and unrelated changes. Commit
+   each coherent change separately and stage only its intended paths.
+3. Push only the feature branch with
+   `git push --set-upstream <github-remote> HEAD`. Never push the default branch,
+   use a force push, skip a failing hook, or bypass branch protection. Hooks
+   must not implicitly perform live or graphical checks. Use the repository's
+   documented opt-in for those checks when authorized.
+4. Open a pull request against the intended default branch. Describe the final
+   behavior, validation results, limitations, and release implications. Review
+   the full diff separately from implementation and address actionable feedback.
+5. Require all applicable checks to pass on the current PR head and resolve
+   review conversations. After a new push, inspect checks for the new head.
+   A queued merge is not evidence that checks have passed or the PR has merged.
+6. Squash-merge without bypassing protection. Confirm the resulting default
+   branch SHA, wait for its applicable checks, and delete the merged feature
+   branch after verifying no unmerged work remains.
+7. Follow the repository's publication section only when the change needs a
+   release or deployment and that action is authorized. Existing authorization
+   carries forward. A merge alone does not prove publication succeeded.
+
+Record the PR, merged SHA, checks, and any delivered artifact or deployment.
+Diagnose failed checks before retrying. Repair source through a corrective PR
+instead of rewriting published history.
 
 ## Shared release rules
 
