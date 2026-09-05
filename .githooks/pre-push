@@ -8,5 +8,6 @@ find .specify/scripts/bash -type f -name '*.sh' -print0 | xargs -0 -r -n1 bash -
 if command -v specify >/dev/null 2>&1; then
   specify integration status >/dev/null
 fi
+python3 -m unittest discover -s tests -v
 actionlint
 zizmor --offline --min-severity medium --min-confidence medium .github

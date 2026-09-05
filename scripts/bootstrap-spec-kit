@@ -10,11 +10,13 @@ cron='17 7 * * 1'
 while (($#)); do
   case "$1" in
     --tooling-ref)
-      tooling_ref=${2-}
+      (($# >= 2)) || { usage; exit 2; }
+      tooling_ref=$2
       shift 2
       ;;
     --cron)
-      cron=${2-}
+      (($# >= 2)) || { usage; exit 2; }
+      cron=$2
       shift 2
       ;;
     --help|-h)
@@ -26,6 +28,7 @@ while (($#)); do
       exit 2
       ;;
     *)
+      [[ -z "${repository-}" ]] || { usage; exit 2; }
       repository=$1
       shift
       ;;
@@ -48,14 +51,23 @@ fi
   --script sh --ignore-agent-tools)
 mkdir -p "${root}/.github/workflows"
 central_root=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
-sed \
-  -e "s/CENTRAL_WORKFLOW_REF/${tooling_ref}/g" \
-  -e "s/SPEC_KIT_UPDATE_CRON/${cron}/g" \
-  "${central_root}/templates/spec-kit.yml" \
-  >"${root}/.github/workflows/spec-kit.yml"
+python3 - "${central_root}/templates/spec-kit.yml" \
+  "${root}/.github/workflows/spec-kit.yml" "${tooling_ref}" "${cron}" <<'PYTHON'
+import json
+from pathlib import Path
+import sys
+
+source, destination, tooling_ref, cron = sys.argv[1:]
+text = Path(source).read_text(encoding="utf-8")
+text = text.replace("CENTRAL_WORKFLOW_REF", tooling_ref)
+# A JSON string is also a YAML quoted scalar, including quotes and backslashes.
+text = text.replace('"SPEC_KIT_UPDATE_CRON"', json.dumps(cron))
+Path(destination).write_text(text, encoding="utf-8")
+PYTHON
 python3 "${central_root}/scripts/validate-spec-kit.py" "${root}"
 
 cat <<'EOF'
-Spec Kit initialized. Tailor .specify/memory/constitution.md, add the
-repository workflow guidance to AGENTS.md, and rerun validation before commit.
+Spec Kit initialized. Tailor .specify/memory/constitution.md, create the
+project-owned .specify/memory/project-guide.md, and reference both from
+AGENTS.md with the repository workflow guidance. Rerun validation before commit.
 EOF

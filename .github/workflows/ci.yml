@@ -38,6 +38,9 @@ jobs:
       - name: Validate workflows
         run: actionlint -color
 
+      - name: Test fleet tooling
+        run: python3 -m unittest discover -s tests -v
+
       - name: Validate Spec Kit
         run: python3 scripts/validate-spec-kit.py .
 
