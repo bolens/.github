@@ -59,3 +59,9 @@ class SelectionTests(unittest.TestCase):
         self.add("owned.py")
         with mock.patch.dict(os.environ, {"GIT_DIR": "/nonexistent/git", "GIT_INDEX_FILE": "/nonexistent/index"}):
             self.assertEqual(MODULE.select(self.root, {"python": ["*.py"]}), {"python": ["owned.py"]})
+
+    def test_direct_shell_and_python_shebangs_are_selected(self):
+        self.add("scripts/shell", "#!/bin/bash\necho ok\n")
+        self.add("scripts/python", "#!/usr/bin/env -S python3 -u\nprint('ok')\n")
+        self.assertEqual(MODULE.select(self.root, {"shell": ["*"], "python": ["*"]}), {
+            "shell": ["scripts/shell"], "python": ["scripts/python"]})

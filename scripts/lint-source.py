@@ -33,9 +33,15 @@ def select(root, config):
             if path.is_symlink() or not path.resolve().is_relative_to(root.resolve()):
                 raise ValueError(f"Refusing symlink source: {name}")
             suffix_matches = file.suffix in SUFFIXES[kind]
-            if kind == "shell" and not suffix_matches and path.is_file():
-                first = path.read_bytes().split(b"\n", 1)[0]
-                suffix_matches = first.startswith(b"#!") and first.split()[-1:] in ([b"bash"], [b"sh"], [b"/bin/bash"], [b"/bin/sh"])
+            if kind in {"shell", "python"} and not suffix_matches and path.is_file():
+                with path.open("rb") as source:
+                    first = source.readline(256).strip()
+                if first.startswith(b"#!"):
+                    words = first[2:].split()
+                    if words and words[0].rsplit(b"/", 1)[-1] == b"env":
+                        words = [word for word in words[1:] if word != b"-S"]
+                    interpreter = words[0].rsplit(b"/", 1)[-1] if words else b""
+                    suffix_matches = interpreter in ({b"sh", b"bash"} if kind == "shell" else {b"python", b"python3"})
             if suffix_matches:
                 selected.append(name)
         if not selected:
