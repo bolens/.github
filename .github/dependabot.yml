@@ -17,3 +17,13 @@ updates:
       include: scope
     cooldown:
       default-days: 7
+
+  - package-ecosystem: npm
+    directory: /tools/source-lint
+    schedule:
+      interval: weekly
+    groups:
+      lint-tooling:
+        patterns: ['*']
+    commit-message:
+      prefix: ci(deps)
