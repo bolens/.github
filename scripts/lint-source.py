@@ -3,6 +3,7 @@
 import argparse
 import fnmatch
 import json
+import os
 from pathlib import Path
 import subprocess
 
@@ -16,7 +17,8 @@ def select(root, config):
     for key in KINDS | {"exclude"}:
         if key in config and (not isinstance(config[key], list) or not all(isinstance(x, str) and x for x in config[key])):
             raise ValueError(f"{key} must be a list of nonempty glob strings")
-    raw = subprocess.check_output(["git", "ls-files", "-z"], cwd=root)
+    environment = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
+    raw = subprocess.check_output(["git", "ls-files", "-z"], cwd=root, env=environment)
     files = [Path(x.decode()) for x in raw.split(b"\0") if x]
     result = {}
     for kind in sorted(KINDS & config.keys()):

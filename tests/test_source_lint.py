@@ -1,4 +1,6 @@
 import importlib.util
+import os
+from unittest import mock
 from pathlib import Path
 import subprocess
 import tempfile
@@ -11,6 +13,10 @@ SPEC.loader.exec_module(MODULE)
 
 class SelectionTests(unittest.TestCase):
     def setUp(self):
+        environment = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
+        patch = mock.patch.dict(os.environ, environment, clear=True)
+        patch.start()
+        self.addCleanup(patch.stop)
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
@@ -48,3 +54,8 @@ class SelectionTests(unittest.TestCase):
         self.add("scripts/check", "#!/usr/bin/env bash\necho ok\n")
         self.add("scripts/data", "not shell\n")
         self.assertEqual(MODULE.select(self.root, {"shell": ["scripts/*"]}), {"shell": ["scripts/check"]})
+
+    def test_inherited_git_context_cannot_redirect_selection(self):
+        self.add("owned.py")
+        with mock.patch.dict(os.environ, {"GIT_DIR": "/nonexistent/git", "GIT_INDEX_FILE": "/nonexistent/index"}):
+            self.assertEqual(MODULE.select(self.root, {"python": ["*.py"]}), {"python": ["owned.py"]})

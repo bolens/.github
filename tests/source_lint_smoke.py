@@ -1,8 +1,13 @@
 """Exercise real tools; run after installing the shared lint dependencies."""
 from pathlib import Path
 import json
+import os
 import subprocess
 import tempfile
+
+for key in list(os.environ):
+    if key.startswith("GIT_"):
+        del os.environ[key]
 
 TOOL = Path(__file__).resolve().parents[1] / "scripts/lint-source.py"
 CASES = {
