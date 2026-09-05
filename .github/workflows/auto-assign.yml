@@ -1,0 +1,20 @@
+name: Assign maintainer
+
+on:
+  issues:
+    types: [opened, reopened, transferred]
+  # Metadata only: the pinned reusable workflow never checks out or executes PR code.
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
+    types: [opened, reopened]
+  schedule:
+    - cron: '13 6 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  assign:
+    permissions:
+      issues: write
+      pull-requests: write
+    uses: ./.github/workflows/reusable-auto-assign.yml

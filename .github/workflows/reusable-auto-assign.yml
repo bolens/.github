@@ -1,0 +1,58 @@
+name: Reusable maintainer assignment
+
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  assign:
+    name: assign maintainer
+    if: github.repository_owner == 'bolens'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Assign open items
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+        with:
+          retries: 3
+          script: |
+            const assignee = 'bolens';
+            const repo = context.repo;
+            if (repo.owner !== assignee) {
+              throw new Error('Maintainer assignment is limited to bolens repositories');
+            }
+            let items;
+            if (['schedule', 'workflow_dispatch'].includes(context.eventName)) {
+              items = await github.paginate(github.rest.issues.listForRepo, {
+                ...repo, state: 'open', per_page: 100,
+              });
+            } else if (['issues', 'pull_request_target'].includes(context.eventName)) {
+              const issue_number = context.issue.number;
+              if (!Number.isSafeInteger(issue_number) || issue_number < 1) {
+                throw new Error('Missing or invalid issue/PR number');
+              }
+              const response = await github.rest.issues.get({...repo, issue_number});
+              items = [response.data];
+            } else {
+              throw new Error('Unsupported assignment event');
+            }
+            let assigned = 0;
+            for (const item of items) {
+              if (item.state !== 'open' || item.assignees.some(
+                user => user.login.toLowerCase() === assignee,
+              )) continue;
+              const response = await github.rest.issues.addAssignees({
+                ...repo, issue_number: item.number, assignees: [assignee],
+              });
+              if (!response.data.assignees.some(
+                user => user.login.toLowerCase() === assignee,
+              )) {
+                throw new Error(`Assignment was not applied to item #${item.number}`);
+              }
+              assigned += 1;
+            }
+            core.info(`Assigned ${assigned} of ${items.length} inspected open items`);
