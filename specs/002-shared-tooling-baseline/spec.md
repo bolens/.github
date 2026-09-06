@@ -2,7 +2,7 @@
 
 **Created**: 2026-09-05
 **Status**: Retrospective baseline
-**Inspected revision**: `59981d29243adcec608e045188a9219db62a7605`
+**Inspected revision**: `98f7e89fc520e1b97b4eb591678134c814cf539c`
 **Input**: The owner requested a fleet-wide Spec Kit retrofit and implementation audit.
 
 Shared workflows provide reusable fleet tooling while consumer repositories retain their native product gates.
