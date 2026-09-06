@@ -11,7 +11,9 @@
     ".githooks/*"
   ],
   "markdown": [
-    "docs/source-lint.md"
+    "docs/source-lint.md",
+    "docs/development-environments.md",
+    "specs/003-development-environments/*.md"
   ],
   "notes": "Managed Spec Kit files are verified by their dedicated integration gate."
 }
