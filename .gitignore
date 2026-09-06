@@ -10,3 +10,13 @@ __pycache__/
 devenv.local.nix
 devenv.local.yaml
 *.py[cod]
+
+# Shared VS Code configuration; keep personal editor state ignored.
+!/.vscode/
+/.vscode/*
+!/.vscode/settings.json
+!/.vscode/extensions.json
+!/.vscode/tasks.json
+!/.vscode/launch.json
+!/.vscode/*.code-snippets
+!/.vscode/README.md
