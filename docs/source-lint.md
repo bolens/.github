@@ -1,5 +1,7 @@
 # Source lint contract
 
+[Documentation](README.md)
+
 Use this gate for maintained source that lacks an equivalent native lint check.
 Keep native Go vet/golangci-lint, Rust Clippy, TypeScript/ESLint, PSScriptAnalyzer,
 QML, Fish, container, and repository-specific checks in their owning projects.

@@ -1,5 +1,7 @@
 # Maintainer assignment
 
+[Documentation](README.md)
+
 Personal repositories assign issues and pull requests to `bolens`. Assignment tracks
 responsibility, including the maintainer's own PRs, draft PRs, dependency updates, and
 contributions from forks. It does not request a review or remove other assignees.
