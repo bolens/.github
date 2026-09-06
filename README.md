@@ -18,3 +18,7 @@ repositories retain their project-specific build, test, and release logic.
 Call reusable workflows by an immutable release tag once the repository begins
 publishing baseline releases. Pilot repositories temporarily follow `main` so
 the interface can settle.
+
+## Development tooling
+
+See [development environments](docs/development-environments.md) for the locked toolchain and local container adapters.
