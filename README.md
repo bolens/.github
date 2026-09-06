@@ -24,3 +24,8 @@ PRs after verifying the shared change.
 ## Development tooling
 
 See [development environments](docs/development-environments.md) for the locked toolchain and local container adapters.
+
+## License scope and attribution
+
+See [third-party notices](THIRD_PARTY_NOTICES.md) for the project license scope,
+retained upstream notices, and dependency or asset exceptions.
