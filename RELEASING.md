@@ -75,6 +75,15 @@ between dependent work. Its optional helper records evidence in each worktree's
 Git directory and adds no runtime dependency to the maintained application.
 Do not copy private logs, source caches, or fleet inventories into public commits.
 
+When returning to earlier maintenance, compare repository identity, candidate,
+and check coverage before reporting progress. Separate proposed work, agent
+completion claims, observed checks, and delivered changes. Several records of
+one fix are one event. Missing or failed observations remain unknown. Before
+adding a recurring process, state the failure it addresses, a measurable baseline,
+and a reassessment point in existing task notes. Use the
+[audit comparison guidance](https://github.com/bolens/agent-skills/blob/main/skills/audit-repo-fleet/references/comparing-runs.md)
+to preserve counterevidence and decide whether the process helped.
+
 Run independent checks together only when their writable state and external
 resources are isolated. Serialize shared writers and generators. Delegation remains
 subject to session authorization. Diagnose failures before retrying an unchanged
