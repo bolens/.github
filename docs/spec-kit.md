@@ -6,8 +6,11 @@ changes, security-sensitive behavior, migrations, and coordinated multi-file
 changes. Skip it for narrow fixes, dependency updates, prose edits, and release
 housekeeping unless their risk warrants a written specification.
 
-Keep completed feature directories under `specs/` as decision history. Do not
-create retroactive specifications for finished work.
+Keep completed feature directories under `specs/` as decision history. Backfill
+finished work when explicitly requested. Label those documents as retrospective
+baselines, identify the inspected revision, and map requirements to source and
+acceptance evidence. Distinguish observed behavior from corrective requirements.
+Never imply that a retrospective specification preceded its implementation.
 
 ## Project-owned customization
 
@@ -28,10 +31,13 @@ hash-checked. Their reusable placeholders are intentional. Put local rules in
 project-owned memory instead of modifying managed files or their recorded
 hashes. Verify project-owned memory survives regeneration when upgrading.
 
-Feature implementation remains separate from installing Spec Kit. For future
-features, fill the generated spec, plan, and tasks with actual decisions and
-evidence; mark work complete only after its acceptance checks. Empty feature
-history is valid for a repository that has not yet used that workflow.
+Feature implementation remains separate from installing Spec Kit. For new
+features and requested retrofits, fill the spec, plan, and tasks with actual
+decisions and evidence. Mark work complete only after its acceptance checks.
+Record a failed, unavailable, or hardware-dependent check as such. Installation
+validation does not prove that feature requirements are implemented. Empty
+feature history is valid until a repository adopts feature planning or its
+owner requests a retrospective baseline.
 
 ## Validation and updates
 
