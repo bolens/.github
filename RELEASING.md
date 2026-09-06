@@ -61,6 +61,27 @@ Record the PR, merged SHA, checks, and any delivered artifact or deployment.
 Diagnose failed checks before retrying. Repair source through a corrective PR
 instead of rewriting published history.
 
+## Execution evidence and retries
+
+Keep each repository's native validation commands. For work spanning repositories
+or long checks, record the candidate revision, owned paths, acceptance conditions,
+dependencies, command results, and delivery state. A result from an older revision,
+a skipped test, or a completed subprocess does not establish all acceptance
+conditions. Recheck affected evidence after source, toolchain, or environment changes.
+
+Use the [fleet execution-evidence contract](https://github.com/bolens/agent-skills/blob/main/skills/audit-repo-fleet/references/execution-evidence.md)
+for private task records, bounded command execution, explained retries, and joins
+between dependent work. Its optional helper records evidence in each worktree's
+Git directory and adds no runtime dependency to the maintained application.
+Do not copy private logs, source caches, or fleet inventories into public commits.
+
+Run independent checks together only when their writable state and external
+resources are isolated. Serialize shared writers and generators. Delegation remains
+subject to session authorization. Diagnose failures before retrying an unchanged
+candidate, set finite attempt and time limits, and continue independent work when
+a prerequisite is blocked. Require observed checks and review outcomes before the
+existing merge and publication gates. Tests and review do not guarantee zero defects.
+
 ## Shared release rules
 
 1. Start from the latest default branch in a clean worktree. Review staged
