@@ -50,8 +50,9 @@ The reusable validation workflow checks:
 
 Each caller runs validation only when Spec Kit files or repository guidance
 change. Its weekly schedule resolves the latest stable upstream release to an
-immutable commit, regenerates managed files, proves that the constitution was
-preserved, validates the result, and opens a squash-ready pull request.
+immutable commit, regenerates managed files, proves that pre-existing project-owned
+memory and `AGENTS.md` were preserved, validates the result, and opens a squash-ready
+pull request.
 
 The repository setting **Allow GitHub Actions to create and approve pull
 requests** must permit pull-request creation. The updater uses only the caller's
@@ -60,7 +61,7 @@ requests** must permit pull-request creation. The updater uses only the caller's
 Run the same validation locally:
 
 ```bash
-python3 scripts/validate-spec-kit.py --expected-version 1.0.3 .
+python3 scripts/validate-spec-kit.py --expected-version current .
 ```
 
 From this repository, validate several checked-out repositories in one command:
@@ -92,3 +93,9 @@ The caller cancels older validation jobs for the same workflow and Git ref.
 The update job has no cancellation group because it can write an update PR.
 Keep this concurrency block in callers when updating their immutable pins;
 reusable workflows inherit the caller workflow name and must not reuse its group.
+
+Both reusable Spec Kit workflows reject mutable tooling references before checkout.
+Regeneration checks all pre-existing memory files except upstream
+`.constitution-template.json`, and existing `AGENTS.md`. Changed or removed project
+guidance stops PR creation; inspect the disposable checkout and repair through the
+normal update workflow. Partial generation is not rolled back automatically.

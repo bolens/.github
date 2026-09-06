@@ -24,7 +24,7 @@ METADATA_RE = re.compile(
 def load_json(path: Path) -> dict:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise ValueError(f"{path}: {exc}") from exc
     if not isinstance(value, dict):
         raise ValueError(f"{path}: root must be an object")
@@ -61,10 +61,21 @@ def validate(root: Path, expected_version: str) -> list[str]:
             errors.append(f"{integration_path}: {key} is "
                           f"{integration.get(key)!r}; expected {expected!r}")
 
-    settings = integration.get("integration_settings", {}).get("codex", {})
+    settings = integration.get("integration_settings", {})
+    if not isinstance(settings, dict):
+        errors.append(f"{integration_path}: integration_settings must be an object")
+        settings = {}
+    settings = settings.get("codex", {})
+    if not isinstance(settings, dict):
+        errors.append(f"{integration_path}: Codex settings must be an object")
+        settings = {}
     if settings.get("script") != "sh":
         errors.append(f"{integration_path}: Codex script integration must be sh")
-    if settings.get("parsed_options", {}).get("skills") is not True:
+    parsed_options = settings.get("parsed_options", {})
+    if not isinstance(parsed_options, dict):
+        errors.append(f"{integration_path}: parsed_options must be an object")
+        parsed_options = {}
+    if parsed_options.get("skills") is not True:
         errors.append(f"{integration_path}: Codex skills integration is disabled")
 
     expected_options = {
@@ -102,6 +113,12 @@ def validate(root: Path, expected_version: str) -> list[str]:
             continue
         for relative, expected_hash in files.items():
             managed_path = root / relative
+            parts = Path(relative).parts
+            if (not parts or Path(relative).is_absolute() or ".." in parts
+                    or any((root.joinpath(*parts[:index])).is_symlink()
+                           for index in range(1, len(parts) + 1))):
+                errors.append(f"{manifest_path}: unsafe managed path {relative}")
+                continue
             if not managed_path.is_file():
                 errors.append(f"{manifest_path}: missing managed file {relative}")
             elif sha256(managed_path) != expected_hash:

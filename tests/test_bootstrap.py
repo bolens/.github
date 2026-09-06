@@ -61,6 +61,21 @@ for name in ('.specify', '.agents'):
         self.assertEqual(result.returncode, 2)
         self.assertFalse((self.repo / '.specify').exists())
 
+    def test_dirty_repository_is_rejected_before_generation(self):
+        (self.repo / 'unrelated.txt').write_text('preserve me')
+        result = self.bootstrap('--tooling-ref', 'a' * 40, str(self.repo))
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn('dirty worktree', result.stderr)
+        self.assertFalse((self.repo / '.specify').exists())
+        self.assertEqual((self.repo / 'unrelated.txt').read_text(), 'preserve me')
+
+    def test_mutable_tooling_is_rejected_before_generation(self):
+        for ref in ('main', 'v1.0.4', 'a' * 39, 'A' * 40):
+            with self.subTest(ref=ref):
+                result = self.bootstrap('--tooling-ref', ref, str(self.repo))
+                self.assertEqual(result.returncode, 2)
+                self.assertFalse((self.repo / '.specify').exists())
+
 
 if __name__ == '__main__':
     unittest.main()
