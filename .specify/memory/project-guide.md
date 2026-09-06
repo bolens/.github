@@ -1,5 +1,7 @@
 # .github Spec Kit project guide
 
+[Documentation](../../docs/README.md)
+
 Shared GitHub workflows and community policy for the personal repository fleet.
 
 Read this guide with `AGENTS.md` and `.specify/memory/constitution.md` before

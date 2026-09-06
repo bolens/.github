@@ -1,5 +1,7 @@
 # Release Playbook Standard
 
+[Documentation](docs/README.md)
+
 The `.github` repository continuously delivers shared community files and reusable
 workflows from protected `main`; it does not publish versioned artifacts. Changes
 require local workflow lint, a representative caller check, a reviewed squash

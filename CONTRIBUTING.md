@@ -1,5 +1,7 @@
 # Contributing
 
+[Documentation](docs/README.md)
+
 Thanks for contributing.
 
 Before opening a pull request:
