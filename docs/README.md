@@ -50,3 +50,5 @@ runtime proof. A topic without an implementation stays explicitly unimplemented.
 - [Fleet Spec Kit policy](spec-kit.md)
 
 - [Repository documentation standard](documentation.md)
+
+- [Editor setup](../.vscode/README.md)
