@@ -27,6 +27,12 @@ jobs:
       - name: Checkout caller repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Validate tooling revision
+        env:
+          TOOLING_REF: ${{ inputs.tooling-ref }}
+        run: |
+          [[ "${TOOLING_REF}" =~ ^[0-9a-f]{40}$ ]]
+
       - name: Checkout fleet validator
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -87,18 +93,7 @@ jobs:
         env:
           SPEC_KIT_SHA: ${{ steps.release.outputs.sha }}
         run: |
-          set -euo pipefail
-          constitution_before=$(sha256sum .specify/memory/constitution.md | cut -d' ' -f1)
-          uv tool run \
-            --from "git+https://github.com/github/spec-kit.git@${SPEC_KIT_SHA}" \
-            specify init --here --force --non-interactive \
-              --integration codex --integration-options='--skills' \
-              --script sh --ignore-agent-tools
-          constitution_after=$(sha256sum .specify/memory/constitution.md | cut -d' ' -f1)
-          if [[ "${constitution_before}" != "${constitution_after}" ]]; then
-            echo 'Spec Kit regeneration changed the repository constitution.' >&2
-            exit 1
-          fi
+          python3 .fleet-config/scripts/regenerate-spec-kit.py "${SPEC_KIT_SHA}"
 
       - name: Validate update
         if: steps.current.outputs.needed == 'true'

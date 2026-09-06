@@ -38,7 +38,13 @@ A maintainer changes a supported contract.
 - **FR-002**: Integration validation MUST check version, options, manifests, managed hashes, governance metadata, and Bash syntax.
 - **FR-003**: Source lint MUST select tracked configured sources, reject invalid or empty configurations and unsafe symlinks, and preserve imported/generated exclusions.
 - **FR-004**: Reusable workflows MUST preserve immutable tooling references, explicit permissions, caller contracts, and untrusted-event boundaries.
-- **FR-005**: Maintainer assignment MUST use the documented account and event policy without interfering with excluded automation.
+- **FR-005**: Maintainer assignment MUST use the documented account and event policy including maintainer, bot, and fork authors as required by the original assignment specification.
+
+## Corrective requirements from the 2026-09-06 audit
+
+- **FR-006**: Both reusable Spec Kit workflows MUST reject a tooling reference that is not a lowercase 40-character commit SHA before checking out tooling. Existing immutable callers remain compatible.
+- **FR-007**: Regeneration MUST fail before opening an update PR if it modifies or removes any pre-existing project-owned memory file or `AGENTS.md`. The upstream `.constitution-template.json` metadata may change. Upstream failures MUST remain failures; the temporary runner checkout need not be rolled back.
+- **FR-008**: Malformed nested settings or non-UTF-8 JSON MUST report a failed repository and continue checking other requested repositories. Managed paths MUST stay inside their repository and MUST NOT traverse symlinks.
 
 ## Success criteria
 

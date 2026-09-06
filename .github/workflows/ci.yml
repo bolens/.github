@@ -12,6 +12,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  spec-kit-caller:
+    name: Spec Kit caller compatibility
+    permissions:
+      contents: read
+    uses: ./.github/workflows/reusable-spec-kit.yml
+    with:
+      tooling-ref: ${{ github.sha }}
+
   validate:
     name: Validate
     runs-on: ubuntu-latest
