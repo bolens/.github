@@ -20,3 +20,8 @@ force pushes, and branch-protection bypasses are not part of the fleet workflow.
 
 Security vulnerabilities should be reported according to `SECURITY.md`, not in
 a public issue.
+
+## Devcontainer
+
+See [the devcontainer guide](.devcontainer/README.md) for the repository toolchain,
+setup, checks and platform limits.
