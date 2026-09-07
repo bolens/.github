@@ -1,5 +1,7 @@
 # Support
 
+[Documentation](docs/README.md)
+
 Use the repository's discussions or issue tracker for reproducible bugs and
 focused feature requests. Include the relevant version, operating environment,
 expected behavior, actual behavior, and a minimal reproduction when possible.

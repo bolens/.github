@@ -1,10 +1,8 @@
 # Agent guidance
 
-Before Spec Kit planning or implementation, read
-`.specify/memory/project-guide.md` with the project constitution. It maps
-requirements to this repository's source, acceptance evidence, and validation.
+[Documentation](docs/README.md) maps architecture, deployment, state, and document ownership.
 
-Read `.specify/memory/constitution.md` before changing shared workflows.
+Read [.specify/memory/constitution.md](.specify/memory/constitution.md) before changing shared workflows.
 
 - Use Spec Kit for new capabilities, architecture, security-sensitive behavior,
   migrations, and coordinated multi-file changes. Keep narrow fixes, dependency
@@ -17,18 +15,15 @@ Read `.specify/memory/constitution.md` before changing shared workflows.
 - Do not publish releases, tags, or repository settings unless requested.
 
 - Run `bash scripts/install-git-hooks` once per clone; hooks mirror workflow and Spec Kit validation locally.
-- Keep `docs/spec-kit.md`, the reusable Spec Kit workflows, bootstrap template,
+- Keep [docs/spec-kit.md](docs/spec-kit.md), the reusable Spec Kit workflows, bootstrap template,
   and validator aligned. Callers pin this repository by immutable commit.
 
 ## Context and handoffs
 
-- Locate source with targeted searches before reading. For exploratory reads of
-  files over 350 lines, select relevant ranges. Read required guidance and actual
-  source before edits or correctness claims; summaries do not replace them.
-- When delegation is permitted, give each worker one question or concrete output,
-  allowed paths, and a check. Return findings with source locations, changed paths,
-  and verification gaps. Keep final review with the coordinating agent.
-- Record durable user corrections in the [project guide](.specify/memory/project-guide.md)
-  or owning contract with scope, reason, and evidence. Replace superseded advice;
-  read relevant corrections before reusing assumptions. Keep temporary progress
-  in task notes and preserve existing authority rules.
+- Search before reading. Use bounded source excerpts for exploratory reads over
+  350 lines, and inspect required guidance and actual source before editing.
+- When delegation is permitted, assign a bounded question or output, paths, and
+  check. Return source locations, changes, and verification gaps for final review.
+- Keep durable corrections in the [project guide](.specify/memory/project-guide.md)
+  or owning contract. Replace superseded advice and read it before reuse.
+  Temporary progress belongs in task notes. Preserve existing authority rules.

@@ -1,5 +1,7 @@
 # Shared GitHub configuration
 
+[Documentation](docs/README.md)
+
 This repository contains default community health files and reusable GitHub
 Actions workflows for repositories owned by `bolens`.
 

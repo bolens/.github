@@ -1,5 +1,7 @@
 # Fleet Spec Kit policy
 
+[Documentation](README.md)
+
 Repositories use GitHub Spec Kit when behavior or design needs an explicit
 contract before implementation. Use it for new capabilities, architectural
 changes, security-sensitive behavior, migrations, and coordinated multi-file
