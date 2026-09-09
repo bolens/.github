@@ -96,8 +96,11 @@ jobs:
           args: --version
       - name: Install lint dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends shellcheck
+          # Lint needs Ubuntu packages, not the runner's unrelated vendor feeds.
+          test -s /etc/apt/sources.list.d/ubuntu.sources
+          apt_sources=(-o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=-)
+          sudo apt-get "${apt_sources[@]}" update
+          sudo apt-get "${apt_sources[@]}" install --yes --no-install-recommends shellcheck
           npm ci --ignore-scripts --prefix tools/source-lint
       - run: python3 scripts/lint-source.py .
       - run: python3 tests/source_lint_smoke.py

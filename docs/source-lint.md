@@ -13,6 +13,10 @@ contains nonempty Git-path globs; `*` also matches directory separators. Enabled
 checks must match at least one tracked file. `exclude` contains reviewed glob
 exclusions and `notes` explains imported/generated ownership or native coverage.
 
+The hosted lint setup reads only the runner's Ubuntu `ubuntu.sources` file.
+Unrelated vendor feeds cannot block ShellCheck installation. Missing Ubuntu
+sources or failed package verification still fail the job.
+
 Supported checks:
 
 - `python`: Ruff 0.15.20 syntax and Pyflakes correctness (`E9,F`), without formatting.
