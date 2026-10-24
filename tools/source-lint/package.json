@@ -7,8 +7,8 @@
   },
   "dependencies": {
     "@eslint/js": "10.0.1",
-    "eslint": "10.10.0",
-    "markdownlint": "0.41.1",
-    "stylelint": "17.15.0"
+    "eslint": "10.13.0",
+    "markdownlint": "0.42.0",
+    "stylelint": "17.16.0"
   }
 }
