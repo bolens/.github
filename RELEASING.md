@@ -159,3 +159,11 @@ Keep release, deployment, and repository-update operations outside cancellable
 validation groups. Mixed workflows must isolate PR validation from publication.
 After a newer commit supersedes a run, require successful checks on the current
 head before merging or delivering; a cancelled older run is not passing evidence.
+
+## Woodpecker validation
+
+[The transition contract](docs/woodpecker-transition.md) runs the existing Linux
+`devenv test` on Woodpecker. Require actual native PR and merged-main success
+before retiring duplicate GitHub validation. Platform and administrative gates
+remain in GitHub until an equivalent contract is verified. This pipeline does
+not deploy configurations, publish artifacts, or create release tags.
