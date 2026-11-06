@@ -12,8 +12,10 @@ environment result before squash merging, then verify the genuine merged-main
 pipeline. Woodpecker runs workflow syntax/security, fleet tooling tests, managed
 Spec Kit validation, and all five source-lint language fixtures through the
 existing development gate. The duplicate hosted Validate, zizmor, and Source
-lint jobs remain manual fallbacks. GitHub still exercises the actual reusable
-Spec Kit caller on every PR; reusable workflow interfaces remain unchanged.
+lint jobs remain manual fallbacks. The dedicated hosted Spec Kit caller workflow exercises the actual reusable
+validator on every PR and main push. It has no manual maintenance trigger;
+manual validation retains the separate immutable caller. Reusable workflow
+interfaces remain unchanged.
 
 The hosted development gate retains macOS native checks and actual Linux Docker
 and editor-image acceptance. It skips the duplicate Linux native invocation.

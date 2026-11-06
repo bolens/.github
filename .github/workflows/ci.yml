@@ -13,17 +13,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  spec-kit-caller:
-    name: Spec Kit caller compatibility
-    # Exercise untrusted candidate tooling only in PR/push validation contexts.
-    # Manual maintenance uses the separately pinned Spec Kit workflow.
-    if: github.event_name != 'workflow_dispatch'
-    permissions:
-      contents: read
-    uses: ./.github/workflows/reusable-spec-kit.yml
-    with:
-      tooling-ref: ${{ github.sha }}
-
   validate:
     name: Validate
     if: github.event_name == 'workflow_dispatch'

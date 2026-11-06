@@ -1,0 +1,21 @@
+name: Spec Kit caller compatibility
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: spec-kit-caller-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  spec-kit-caller:
+    name: Spec Kit caller compatibility
+    permissions:
+      contents: read
+    uses: ./.github/workflows/reusable-spec-kit.yml
+    with:
+      tooling-ref: ${{ github.sha }}
