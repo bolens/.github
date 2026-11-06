@@ -37,6 +37,12 @@ empty enabled selections, or any linter failure fail the job. Dependency install
 use an npm lockfile with lifecycle scripts disabled. The gate never deploys,
 changes live configuration, or requires secrets.
 
+This tooling revision requires Node 22.22.2 or newer in the 22.x line, 24.15.0 or
+newer in the 24.x line, or Node 26+. Stylelint 18 excludes the intervening
+end-of-life Node releases. The hosted workflow uses Node 24. Existing consumers
+remain on their immutable tooling revision until their caller pin is updated;
+review this runtime requirement when adopting the new revision.
+
 To reproduce locally, use a checkout of the same shared SHA and install its tools:
 
 ```sh

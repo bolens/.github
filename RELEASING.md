@@ -59,6 +59,14 @@ publication commands.
    release or deployment and that action is authorized. Existing authorization
    carries forward. A merge alone does not prove publication succeeded.
 
+For this repository, require `ci/woodpecker/pr/woodpecker` and the hosted
+Development environment result. The native gate covers fleet tooling tests,
+workflow syntax/security, Spec Kit integrity, and source lint. The hosted gate
+retains macOS and actual Docker/editor-image acceptance; the reusable Spec Kit
+caller and CodeQL remain hosted. Duplicate Validate, zizmor, and Source lint jobs
+are manual fallbacks. Verify the actual merged-main native pipeline. See the
+[transition contract](docs/woodpecker-transition.md).
+
 Record the PR, merged SHA, checks, and any delivered artifact or deployment.
 Diagnose failed checks before retrying. Repair source through a corrective PR
 instead of rewriting published history.

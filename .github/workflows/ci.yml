@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions: {}
 
@@ -22,6 +23,7 @@ jobs:
 
   validate:
     name: Validate
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -58,6 +60,7 @@ jobs:
 
   zizmor:
     name: zizmor
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -79,6 +82,7 @@ jobs:
 
   source-lint:
     name: Source lint
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
