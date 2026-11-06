@@ -8,3 +8,5 @@ Installation validation alone does not establish feature completion.
 - [Shared workflow and Spec Kit integration contracts](002-shared-tooling-baseline/spec.md): [plan](002-shared-tooling-baseline/plan.md), [coverage](002-shared-tooling-baseline/coverage.md), [legacy capabilities](002-shared-tooling-baseline/legacy-contracts.md), [tasks](002-shared-tooling-baseline/tasks.md).
 
 - [Development environments](003-development-environments/spec.md): repository-local tooling and container validation.
+
+- [Woodpecker Linux validation](004-woodpecker-validation/spec.md) - planned native CI transition.
