@@ -41,3 +41,13 @@ python3 scripts/development-container.py run apple -- bash scripts/check-develop
 The helper exports an OCI archive and uses `container image load`. Native ARM Macs target `aarch64-linux`; x86 Linux builds target `x86_64-linux`. [Building Linux images from macOS requires a Linux builder](https://devenv.sh/containers/). This workflow does not assume Apple container implements Docker Compose or Docker's daemon API.
 
 Apple execution is not verified by Linux tests. The environment validates source and tooling. Existing reusable workflow callers remain governed by their own repository checks. This development workflow validates the shared tooling repository and does not deploy changes to consumers.
+
+## Locked toolchain upgrades
+
+CI uses devenv 2.4.0 at its immutable upstream commit. The lock update preserves
+unrelated inputs and explicitly retains the existing git-hooks input contract.
+The matching nix2container update removes deprecated platform aliases.
+The fixed CI CLI invocation accepts only its reviewed upstream cache settings;
+repository flakes do not receive global configuration trust. Disposable Nix
+steps retain the image's standard `nixbld` users so builds do not run as root or
+leave Go telemetry files in Nix's placeholder home.
