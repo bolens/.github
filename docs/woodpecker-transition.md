@@ -22,3 +22,9 @@ through a corrective PR, without changing live workstation configuration.
 Review image pins monthly and after security releases against the official
 registries. Existing dependency automation does not discover these Woodpecker
 YAML image references; updates require a reviewed PR and native execution.
+
+The rollout also combines the open compatible lint-tool, Actions and editor
+image updates. Editor changes select the hosted development gate, which builds
+the actual devcontainer Dockerfile and executes its post-create smoke as a
+non-root user with no network, capabilities, or writable image filesystem.
+This is separate from the Nix-generated Docker development image.
