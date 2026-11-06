@@ -43,6 +43,11 @@ end-of-life Node releases. The hosted workflow uses Node 24. Existing consumers
 remain on their immutable tooling revision until their caller pin is updated;
 review this runtime requirement when adopting the new revision.
 
+Reviewed overrides update vulnerable transitive parsers and ESLint glob matching.
+The matcher stays on compatible 1.0.3 to preserve the documented Node floor.
+Review these overrides with future parent-tool updates and remove them when the
+parent lock resolves safe compatible versions without an override.
+
 To reproduce locally, use a checkout of the same shared SHA and install its tools:
 
 ```sh
