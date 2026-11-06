@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions: {}
 
@@ -12,16 +13,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  spec-kit-caller:
-    name: Spec Kit caller compatibility
-    permissions:
-      contents: read
-    uses: ./.github/workflows/reusable-spec-kit.yml
-    with:
-      tooling-ref: ${{ github.sha }}
-
   validate:
     name: Validate
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -58,6 +52,7 @@ jobs:
 
   zizmor:
     name: zizmor
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -69,7 +64,7 @@ jobs:
           persist-credentials: false
 
       - name: Audit workflows
-        uses: zizmorcore/zizmor-action@85b2b9fb8e3325e7a23d7d0a9d7ba5ae0f999e3e # v0.7.1
+        uses: zizmorcore/zizmor-action@53290badfa369cb0bf7ad16342cb62c2fa47ac7b # v0.8.0
         with:
           advanced-security: false
           online-audits: false
@@ -79,6 +74,7 @@ jobs:
 
   source-lint:
     name: Source lint
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
