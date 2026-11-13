@@ -13,6 +13,10 @@ devenv test
 
 The shell supplies Node 24, Python, Ruff, Bash, jq, ShellCheck, actionlint, Zizmor, and GNU utilities. `repo-check` installs the existing npm lockfile for source lint, runs the native pre-push and Spec Kit checks, and tests real lint tools against valid and invalid fixtures. Bootstrap tests use disposable repositories. npm installation requires network access. Reusable workflow interfaces and consumer pins remain unchanged.
 
+The Nix shell currently resolves Ruff 0.16.3 through its lockfile. Hosted source
+lint and the editor image pin Ruff 0.17.4. Use Ruff 0.17.4 for exact hosted
+Python-lint reproduction.
+
 Commit `devenv.lock` with deliberate input updates. Local state and `devenv.local.nix` / `devenv.local.yaml` overrides are ignored. Existing Nix cache settings are used without changing daemon trust.
 
 ## Docker and Podman
