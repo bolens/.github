@@ -19,7 +19,7 @@ sources or failed package verification still fail the job.
 
 Supported checks:
 
-- `python`: hosted Ruff 0.17.4 syntax and Pyflakes correctness (`E9,F`), without formatting.
+- `python`: hosted Ruff 0.17.5 syntax and Pyflakes correctness (`E9,F`), without formatting.
 - `shell`: ShellCheck warning/error diagnostics for selected sh/Bash files and shebangs.
 - `javascript`: ESLint recommended logic checks. Host globals and unused exported
   entry points are left to native type/QML checks, so `no-undef` and `no-unused-vars`
@@ -52,7 +52,7 @@ To reproduce locally, use a checkout of the same shared SHA and install its tool
 
 ```sh
 npm ci --ignore-scripts --prefix /path/to/shared/tools/source-lint
-# Install Ruff 0.17.4 and ShellCheck through your normal tool manager.
+# Install Ruff 0.17.5 and ShellCheck through your normal tool manager.
 python3 /path/to/shared/scripts/lint-source.py /path/to/repo
 ```
 

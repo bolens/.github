@@ -33,7 +33,7 @@ jobs:
           node-version: '24'
       - uses: astral-sh/ruff-action@278981a28ce3188b1e39527901f38254bf3aac89
         with:
-          version: '0.17.4'
+          version: '0.17.5'
           args: --version
       - name: Install lint dependencies
         run: |
