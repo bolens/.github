@@ -73,6 +73,10 @@ jobs:
       - name: Validate Docker development image
         if: runner.os == 'Linux'
         run: |
+          # This nix2container revision references a GitHub patch URL returning 503.
+          if [ "$(jq -r '.nodes.nix2container.locked.rev' devenv.lock)" = 42d1df94f001a9416ef08be7b305144074aca9d2 ]; then
+            nix build --impure --no-link --file scripts/cache-nix2container-patch.nix
+          fi
           python3 scripts/development-container.py build docker
           python3 scripts/development-container.py run docker -- bash scripts/check-development.sh
       - name: Build and smoke-test the editor devcontainer
